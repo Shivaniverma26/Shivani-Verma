@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Covid 2019</title>
+    <Link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container" style= "background-color: #81bcd8" >
+        <h1 class="text-center mt-5">Covid Live Data</h1>
+        <table class="table table-hover">
+        <thread>
+            <tr>
+                <div id = "Total1">
+                  <th>  Total Cases
+                    <div id = "Total" ></div></th>
+                </div>
+                <div id = "Recovered1">
+                   <th> Total Recoverd
+                    <div id = "Recovered" ></div></th>
+                </div>  
+                <div id = "Death1">
+                    <th> Death
+                    <div id = "Death" ></div></th>
+                </div>
+            </tr>
+        </thread>
+        <tbody>
+    </tbody>
+</table>
+<form id="myForm">
+<input type = "text" id="country" placeholder="Search any place" >
+<button type = "button" value = "Get Data" onclick="Search()">Search</button>
+<ul id="country" value = "Get Data"></ul>
+</input>
+<ul class=""></ul>
+</form>
+    </div>
+</body>
+<script>
+    // const MySearch = () =>{
+    //     Search();
+    //     let filter = document.getElementById("fill").value.toUpperCase();
+    //     let ul = document.getElementById("country");
+    //     let li = ul.getElementsByTagName("li");
+
+    //     for(var i=0; i<li.length; i++)
+    //     let a = li[i].getElementsByTagName('a')[0];
+
+    //     let textValue = a.textContent || a.innerHTML;
+    //     if(textValue.toUpperCase().indexof(filter) > -1)
+    //     {
+    //         li[i].style.display= '';
+    //     }
+    // }
+ const form = document.getElementById("myForm")
+ form.addEventListener('submit',function(e){
+     e.preventDefault()
+     var country = document.getElementById("country").Global
+     var url = "https://covid-api.mmediagroup.fr/v1/cases"
+
+     covidData(url)
+ })
+ async function covidData(url){
+     let response = await fetch(url)
+     console.log(response)
+     let data = await response.json()
+     console.log(data);
+};
+function Search () {
+    var conti = ['Asia','Africa','Europe','North America','South America','Australia','Antarctica']
+    const text = document.getElementById("country").value;
+    if(text.length===2)
+    {
+      fetch(`https://covid-api.mmediagroup.fr/v1/cases?ab=${text.toUpperCase()}`)
+      .then(response => response.json())
+        .then( data=> {
+            document.getElementById("Total").innerText = data.All.confirmed;
+            document.getElementById("Recovered").innerText = data.All.recovered;
+            document.getElementById("Death").innerText = data.All.deaths;
+            console.log(data);
+            
+        })
+    }
+    else 
+   {  if(conti.indexOf(text)===-1)   
+     {      
+        fetch(`https://covid-api.mmediagroup.fr/v1/cases?country=${text}`)
+        .then(response => response.json())
+         .then( data => {
+            document.getElementById("Total").innerText = data.All.confirmed;
+            document.getElementById("Recovered").innerText = data.All.recovered;
+            document.getElementById("Death").innerText = data.All.deaths;
+            console.log(data);
+        })
+     }
+    else {
+         fetch(`https://covid-api.mmediagroup.fr/v1/cases?continent=${text}`)
+         .then(response => response.json())
+             .then( data=> {
+            document.getElementById("Total").innerText = data.confirmed;
+            document.getElementById("Recovered").innerText = data.recovered;
+            document.getElementById("Death").innerText = data.deaths;
+            console.log(data);
+        })
+    }
+  }
+}
+
+
+</script>
+
+</html>
